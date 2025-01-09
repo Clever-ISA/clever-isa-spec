@@ -1,0 +1,28 @@
+[book]
+authors = ["Connor Horman"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Clever-ISA Specification"
+
+[preprocessor.links]
+
+[preprocessor.add-copyright]
+exclude = ["COPYRIGHT.md"]
+
+[preprocessor.add-copyright.epub-fancy]
+include = []
+
+[preprocessor.clever-spec]
+command = "cargo run --manifest-path ./mdbook-clever/Cargo.toml --release -p mdbook-clever --"
+
+[output.markdown]
+
+[output.html]
+
+# [output.epub-fancy]
+# optional = true
+# output = "full"
+# always-include = ["COPYRIGHT.md", "COPYRIGHT-STUB.md"]
+
+# [output.epub-fancy.file-ids]
