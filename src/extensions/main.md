@@ -94,7 +94,7 @@ table T:1 ["Property", "Description", "Exception Conditions", "Notes"]{
 | **Mnemonic** | `und1`     |
 | **Aliases**  | `und`      |
 
-Behaviour
+#### Behaviour
 
 ```clever-psuedo
 instruction {0o0000, 0o7777}(x: i4):
@@ -112,5 +112,95 @@ instruction {0o0000, 0o7777}(x: i4):
 | **Properties** | `LOCKABLE`, `ARITH`     |
 | **Mnemonic** | `add`     |
 
+| Property     | Definition |
+|:------------:|------------|
+| **Opcode**   | `0o0002`   |
+| **Operands** | 2          |
+| **Op1 Props**| `READ`, `WRITE`, `INT`, `LOCK` |
+| **Control**  | `l00f`     |
+| **Properties** | `LOCKABLE`, `ARITH`     |
+| **Mnemonic** | `sub`     |
+
+| Property     | Definition |
+|:------------:|------------|
+| **Opcode**   | `0o0003`   |
+| **Operands** | 2          |
+| **Op1 Props**| `READ`, `WRITE`, `INT`, `LOCK` |
+| **Control**  | `l00f`     |
+| **Properties** | `LOCKABLE`, `LOGIC`     |
+| **Mnemonic** | `and`     |
+
+| Property     | Definition |
+|:------------:|------------|
+| **Opcode**   | `0o0004`   |
+| **Operands** | 2          |
+| **Op1 Props**| `READ`, `WRITE`, `INT`, `LOCK` |
+| **Control**  | `l00f`     |
+| **Properties** | `LOCKABLE`, `LOGIC`     |
+| **Mnemonic** | `or`     |
+
+| Property     | Definition |
+|:------------:|------------|
+| **Opcode**   | `0o0005`   |
+| **Operands** | 2          |
+| **Op1 Props**| `READ`, `WRITE`, `INT`, `LOCK` |
+| **Control**  | `l00f`     |
+| **Properties** | `LOCKABLE`, `LOGIC`     |
+| **Mnemonic** | `xor`     |
+
+#### Behaviour
+
+```clever-psuedo
+enum AluOp : i3{
+    Nop,
+    Add,
+    Sub,
+    And,
+    Or,
+    Xor
+}
+
+instruction {0o0001, 0o0002}(dest: Operand, src2: Operand, l: bool, f: bool):
+    if l:
+       lock(dest);
+    let v1 = read_zx(dest);
+    let v2 = read_zx(src2);
+    let op: AluOp;
+    switch (instruction):
+        case 0o0001:
+            op = AluOp::Add;
+        case 0o0002:
+            op = AluOp::Sub;
+
+    let (res, fl) = alu_compute(v1, v2, op);
+    if f:
+        set_flags(fl, 0x1F);
+    write_truncate(dest, v1);
+    if l:
+        unlock(dest);
+    finish
+
+instruction {0o0003, 0o0004, 0o0005}(dest: Operand, src2: Operand, l: bool, f: bool):
+    if l:
+       lock(dest);
+    let v1 = read_zx(dest);
+    let v2 = read_zx(src2);
+    let op: AluOp;
+    switch (instruction):
+        case 0o0003:
+            op = AluOp::And;
+        case 0o0004:
+            op = AluOp::Or;
+        case 0o0005:
+            op = AluOp::Xor;
+
+    let (res, fl) = alu_compute(v1, v2, op);
+    if f:
+        set_flags(fl, 0x1A);
+    write_truncate(dest, v1);
+    if l:
+        unlock(dest);
+    finish
+```
 
 !{#copyright}
