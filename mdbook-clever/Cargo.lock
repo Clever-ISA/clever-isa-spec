@@ -420,6 +420,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
 
 [[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
 name = "humantime"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -557,9 +563,9 @@ dependencies = [
 
 [[package]]
 name = "mdbook"
-version = "0.4.43"
+version = "0.4.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe1f98b8d66e537d2f0ba06e7dec4f44001deec539a2d18bfc102d6a86189148"
+checksum = "7e1a8fe3a4a01f28dab245c474cb7b95ccb4d3d2f17a5419a3d949f474c45e84"
 dependencies = [
  "anyhow",
  "chrono",
@@ -567,6 +573,7 @@ dependencies = [
  "clap_complete",
  "env_logger",
  "handlebars",
+ "hex",
  "log",
  "memchr",
  "once_cell",
@@ -575,6 +582,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
+ "sha2",
  "shlex",
  "tempfile",
  "toml 0.5.11",
@@ -589,8 +597,8 @@ dependencies = [
  "mdbook",
  "mdbook-fiction-tools",
  "nom",
- "pulldown-cmark 0.12.2",
- "pulldown-cmark-to-cmark",
+ "pulldown-cmark 0.13.0",
+ "pulldown-cmark-to-cmark 21.0.0",
  "serde_json",
  "xml-rs",
 ]
@@ -603,7 +611,7 @@ dependencies = [
  "indexmap",
  "mdbook",
  "pulldown-cmark 0.12.2",
- "pulldown-cmark-to-cmark",
+ "pulldown-cmark-to-cmark 20.0.0",
  "semver",
  "serde",
  "serde_derive",
@@ -786,6 +794,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "pulldown-cmark"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e8bbe1a966bd2f362681a44f6edce3c2310ac21e4d5067a6e7ec396297a6ea0"
+dependencies = [
+ "bitflags",
+ "getopts",
+ "memchr",
+ "pulldown-cmark-escape 0.11.0",
+ "unicase",
+]
+
+[[package]]
 name = "pulldown-cmark-escape"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -804,6 +825,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9011f674c69867783ceecfeb28573c75bcc9473ae64dcc3180d4a939943c3e42"
 dependencies = [
  "pulldown-cmark 0.12.2",
+]
+
+[[package]]
+name = "pulldown-cmark-to-cmark"
+version = "21.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e5b6a0769a491a08b31ea5c62494a8f144ee0987d86d670a8af4df1e1b7cde75"
+dependencies = [
+ "pulldown-cmark 0.13.0",
 ]
 
 [[package]]
@@ -900,9 +930,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.135"
+version = "1.0.140"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b0d7ba2887406110130a978386c4e1befb98c674b4fba677954e4db976630d9"
+checksum = "20068b6e96dc6c9bd23e01df8827e6c7e1f2fddd43c21810382803c136b99373"
 dependencies = [
  "itoa",
  "memchr",

@@ -101,6 +101,11 @@ table T:R1 ["Number", "Name", "Alias Names", "Properties"] {
     row [<!`18`!>, "mode", "", <!!
     * JUMP
     * COMPLEX
+    !>],
+    row [<!`128`!>, "cr0", "", <!!
+    * CTRL
+    * SUPER
+    * COMPLEX
     !>]
 }
 ```
@@ -388,9 +393,9 @@ instruction {0o0003, 0o0004, 0o0005}(dest: Operand, src2: Operand, l: bool, f: b
 
 ##### Lea 1 Op
 
-| Pos | Operand | Properties      |
-|:---:|:-------:|:---------------:|
-|**1**| `src`  | `MEM`, `ADDR`    |
+| Pos | Operand | Properties |
+|:---:|:-------:|:----------:|
+|**1**| `src`   | `MEM`      |
 
 
 ## Behaviour {#mov-behaviour}
@@ -400,6 +405,25 @@ instruction {0o0003, 0o0004, 0o0005}(dest: Operand, src2: Operand, l: bool, f: b
 instruction 0o0010(dest: Operand, src: Operand, f: bool){
     let val = read_zero_ext(src);
     write_truncate(dest, val);
+}
+instruction 0o0011(dest: Operand, src: Operand) {
+    let val = compute_virtual_addr(src);
+    write_truncate(dest, val);
+}
+
+instruction 0o0012(src: Operand, r: Reg4) {
+    let val = read_zero_ext(src);
+    write_register(r as Reg, val);
+}
+
+instruction 0o0013(dest: Operand, r: Reg4) {
+    let val = read_register(r as Reg);
+    write_truncate(dest, val);
+}
+
+instruction 0o0014(src: Operand, r: Reg4) {
+    let val = compute_virtual_addr(src);
+    write_register(r as Reg, val)
 }
 ```
 
