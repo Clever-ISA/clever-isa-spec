@@ -30,10 +30,13 @@ pub fn tag<'src, T: PartialEq<Token<'src>> + Into<ErrorContext> + Clone>(
     tag: T,
 ) -> impl for<'a> FnMut(Input<'src, 'a>) -> IResult<'src, 'a, Token<'a>> {
     move |input| match input {
-        [Spanned { body, span }, rest @ ..] if &tag == body => Ok((rest, Spanned {
-            body: body.borrowed(),
-            span: span.clone(),
-        })),
+        [Spanned { body, span }, rest @ ..] if &tag == body => Ok((
+            rest,
+            Spanned {
+                body: body.borrowed(),
+                span: span.clone(),
+            },
+        )),
         span => Err(nom::Err::Error(Error::create(span, tag.clone().into()))),
     }
 }
@@ -64,10 +67,13 @@ pub fn parse_id<'src, 'a>(input: Input<'src, 'a>) -> IResult<'src, 'a, Id<'src>>
                 span,
             },
             rest @ ..,
-        ] => Ok((rest, Spanned {
-            body: Id(id),
-            span: span.clone(),
-        })),
+        ] => Ok((
+            rest,
+            Spanned {
+                body: Id(id),
+                span: span.clone(),
+            },
+        )),
         rest => Err(nom::Err::Error(Error::create(
             rest,
             Expectation::Identifier,
@@ -85,10 +91,13 @@ pub fn parse_path<'src, 'a>(input: Input<'src, 'a>) -> IResult<'src, 'a, IPath<'
             end: end_span.end,
         };
 
-        (i, Spanned {
-            body: IPath(v),
-            span,
-        })
+        (
+            i,
+            Spanned {
+                body: IPath(v),
+                span,
+            },
+        )
     })
 }
 
@@ -237,15 +246,21 @@ pub fn parse_str<'src, 'a>(input: Input<'src, 'a>) -> IResult<'src, 'a, Cow<'src
 
             if let Some(mut owned) = owned_body {
                 owned.push_str(lit);
-                Ok((rest, Spanned {
-                    body: Cow::Owned(owned),
-                    span,
-                }))
+                Ok((
+                    rest,
+                    Spanned {
+                        body: Cow::Owned(owned),
+                        span,
+                    },
+                ))
             } else {
-                Ok((rest, Spanned {
-                    body: Cow::Borrowed(lit),
-                    span,
-                }))
+                Ok((
+                    rest,
+                    Spanned {
+                        body: Cow::Borrowed(lit),
+                        span,
+                    },
+                ))
             }
         }
         input => Err(nom::Err::Error(Error::create(
@@ -264,10 +279,13 @@ where
     F: FnMut(O2) -> O,
 {
     move |input| match parser.parse(input) {
-        Ok((rest, Spanned { body, span })) => Ok((rest, Spanned {
-            body: map(body),
-            span,
-        })),
+        Ok((rest, Spanned { body, span })) => Ok((
+            rest,
+            Spanned {
+                body: map(body),
+                span,
+            },
+        )),
         Err(e) => Err(e),
     }
 }
@@ -290,10 +308,13 @@ where
             body_parser.clone(),
         ))))(body)
         .map(|(_, val)| {
-            (rest, Spanned {
-                body: val,
-                span: span.clone(),
-            })
+            (
+                rest,
+                Spanned {
+                    body: val,
+                    span: span.clone(),
+                },
+            )
         })
         .map_err(|e| {
             e.map(|e| e.with_context_and_input(input, ErrorContext::Context("In brace group")))
@@ -320,10 +341,13 @@ where
             body_parser.clone(),
         ))))(body)
         .map(|(_, val)| {
-            (rest, Spanned {
-                body: val,
-                span: span.clone(),
-            })
+            (
+                rest,
+                Spanned {
+                    body: val,
+                    span: span.clone(),
+                },
+            )
         })
         .map_err(|e| {
             e.map(|e| e.with_context_and_input(input, ErrorContext::Context("In brace group")))
@@ -358,19 +382,23 @@ pub fn parse_table<'src, 'a>(input: Input<'src, 'a>) -> IResult<'src, 'a, Table<
         end: end_span.end,
     };
 
-    Ok((rest, Spanned {
-        body: Table {
-            label,
-            heading: head,
-            rows,
+    Ok((
+        rest,
+        Spanned {
+            body: Table {
+                label,
+                heading: head,
+                rows,
+            },
+            span,
         },
-        span,
-    }))
+    ))
 }
 
 pub fn parse_row<'src, 'a>(input: Input<'src, 'a>) -> IResult<'src, 'a, Array<'src>> {
     let (rest, (t, body)) =
-        sequence::tuple((tag(Token::KwRow), map_spanned(bracket(parse_elem), Array)))(input)?;
+        sequence::tuple((tag(Token::KwRow), map_spanned(bracket(parse_elem), Array)))(input)
+            .map_err(|e| e.map(|e| e.with_context(ErrorContext::Context("Parsing row here"))))?;
     let a: Spanned<Token> = t;
 
     let span = Span {

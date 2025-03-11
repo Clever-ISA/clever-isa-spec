@@ -1,12 +1,6 @@
-# mdbook-fiction-template
-Template repo using CI with mdbook and mdbook-fiction-tools
+# clever-isa-spec
 
-## CI
-
-CI setup is provided under .github/workflows/mdbook.yml. The configuration will build both a github page and epub artifacts on push to the `dist` branch, or on workflow_dispatch. You can modify the file accordingly if you wish to use another branch for page builds (like `main`). 
-You need to set up github pages on github actions (and configure the environment appropriately).
-
-Third party and other git host workflows are not yet implemented (PRs welcome for standard CI systems).
+Experimental new format of the Clever-ISA Specification.
 
 ## Required Tools
 
