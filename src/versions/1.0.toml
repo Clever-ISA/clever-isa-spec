@@ -1,0 +1,13 @@
+[version]
+curr-release = "1.0.0+def"
+status = "def"
+contents = [
+    "X-main",
+    "X-float",
+    "X-vector",
+    "X-rand",
+    "D-abi",
+    "D-asm",
+    "D-toolchain",
+    "D-stability-policy",
+]

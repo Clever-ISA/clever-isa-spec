@@ -44,7 +44,10 @@ impl<'a> TagExpander<'a> {
     }
 
     pub fn resolve_link<'b>(&self, link: CowStr<'b>) -> Option<(CowStr<'b>, CowStr<'b>)> {
-        let tag = link.strip_prefix("`")?.strip_suffix("`")?;
+        let tag = link
+            .strip_prefix("`")
+            .and_then(|s| s.strip_suffix("`"))
+            .unwrap_or(&link);
 
         let (group, tail) = tag.split_once("-")?;
 
